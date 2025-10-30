@@ -1,0 +1,891 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Dre4m">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="免费开源的一键化部署方案本次部署采用思源+Hexo+GithubActions，本人亲测有效，完全免费，绝对可用 准备工作1.有一个GitHub账号 2.安装Git，hexo部署到GitHub时要用，我这里用的是wsl，wsl自带Git 3.安装NodeJS，hexo是基于NodeJS编写的，所以需要安装NodeJS和npm工具 https:&#x2F;&#x2F;blog.csdn.net&#x2F;yaorongke&#x2F;ar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="免费开源的一键化部署方案">
+<meta property="og:url" content="http://example.com/post/free-and-open-source-oneclick-deployment-solution-5yk6g.html">
+<meta property="og:site_name" content="Dre4m">
+<meta property="og:description" content="免费开源的一键化部署方案本次部署采用思源+Hexo+GithubActions，本人亲测有效，完全免费，绝对可用 准备工作1.有一个GitHub账号 2.安装Git，hexo部署到GitHub时要用，我这里用的是wsl，wsl自带Git 3.安装NodeJS，hexo是基于NodeJS编写的，所以需要安装NodeJS和npm工具 https:&#x2F;&#x2F;blog.csdn.net&#x2F;yaorongke&#x2F;ar">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180139.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180244.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180307.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180330.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180424.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180444.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180504.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180526.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180542.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180643.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180621.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180733.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180811.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181041.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181109.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181136.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181208.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181227.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181250.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181311.png">
+<meta property="article:published_time" content="2025-04-01T17:01:40.000Z">
+<meta property="article:modified_time" content="2025-04-02T18:19:02.000Z">
+<meta property="article:author" content="Dre4m">
+<meta property="article:tag" content="博客搭建">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="思源">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180139.png">
+  
+  
+  
+    <meta name="google-site-verification" content="gUNvx5GJIg9_H74I7HHir--7_INvPGWDD52oHPg_-4k" />
+  
+  <title>免费开源的一键化部署方案 - Dre4m</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"vklZyGJHIw3vHy3PTGM92QOy-gzGzoHsz","app_key":"uiPwluTg2cOzOaF4R6Ljpxw4","server_url":"https://vklzygjh.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Dre4mの摸鱼日记</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="免费开源的一键化部署方案"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-01 17:01" pubdate>
+          2025年4月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">免费开源的一键化部署方案</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="免费开源的一键化部署方案"><a href="#免费开源的一键化部署方案" class="headerlink" title="免费开源的一键化部署方案"></a>免费开源的一键化部署方案</h1><p>本次部署采用思源+Hexo+GithubActions，本人亲测有效，完全免费，绝对可用</p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>1.有一个GitHub账号</p>
+<p>2.安装Git，hexo部署到GitHub时要用，我这里用的是wsl，wsl自带Git</p>
+<p>3.安装NodeJS，hexo是基于NodeJS编写的，所以需要安装NodeJS和npm工具</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yaorongke/article/details/119084295">https://blog.csdn.net/yaorongke/article/details/119084295</a>（Windows）</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/gandongusa/article/details/123010941">https://blog.csdn.net/gandongusa/article/details/123010941</a> （wsl）</p>
+<h1 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h1><p>要创建三个仓库</p>
+<table>
+<thead>
+<tr>
+<th>存放图床</th>
+<th><a target="_blank" rel="noopener" href="https://github.com/Dre4m017/PicGo">https://github.com/Dre4m017/Pic</a></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>存放markdwn</strong></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/Dre4m017/Blogs">https://github.com/Dre4m017/Blogs</a></td>
+</tr>
+<tr>
+<td><strong>存放静态页面</strong></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/Dre4m017/Dre4m017.github.io">https://github.com/Dre4m017/Dre4m017.github.io</a></td>
+</tr>
+</tbody></table>
+<p><em>注意：存放markdown的仓库要设置成私有仓库提高安全性</em></p>
+<h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><p>这里使用Hexo来搭建博客</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bin">npm install -g hexo-cli<br></code></pre></td></tr></table></figure>
+
+<p>查看版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bin">hexo -v<br></code></pre></td></tr></table></figure>
+
+<p>创建一个项目 <code>hexo-blog</code>​ 并初始化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bin">hexo init hexo-blog<br>cd hexo-blog<br>npm install<br></code></pre></td></tr></table></figure>
+
+<p>本地启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bin">hexo g<br>hexo server<br></code></pre></td></tr></table></figure>
+
+<p>浏览器访问 <a href="http://localhost:4000，页面默认主图风格如下">http://localhost:4000，页面默认主图风格如下</a></p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180139.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h1 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h1><p>官方提供了数百种主题供用户选择，可以根据个人喜好更换，官网主题点 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">这里</a> 查看，个人用的是<code>Fluid</code>​，后面章节的功能也是以 <code>Fluid</code>​ 为基础进行讲解的。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-theme-fluid">fluid主题官方介绍</a></p>
+<h2 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h2><p>下载 <a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-theme-fluid/releases">最新 release 版本</a> 解压到 <code>themes</code>​ 目录，并将解压出的文件夹重命名为 <code>fluid</code>​。</p>
+<h2 id="指定主题"><a href="#指定主题" class="headerlink" title="指定主题"></a>指定主题</h2><p>如下修改 <code>Hexo</code>​ 博客目录中的 <code>_config.yml</code>​：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bin">theme: fluid  # 指定主题<br>language: zh-CN  # 指定语言，会影响主题显示的语言，按需修改<br></code></pre></td></tr></table></figure>
+
+<h2 id="创建「关于页」"><a href="#创建「关于页」" class="headerlink" title="创建「关于页」"></a><strong>创建「关于页」</strong></h2><p>首次使用主题的「关于页」需要手动创建：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bin">hexo new page about<br></code></pre></td></tr></table></figure>
+
+<p>创建成功后，编辑博客目录下 <code>/source/about/index.md</code>​，添加 <code>layout</code>​ 属性。</p>
+<p>修改后的文件示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bin">---<br>title: about<br>date: 2020-02-23 19:20:33<br>layout: about<br>---<br><br>这里写关于页的正文，支持 Markdown, HTML<br></code></pre></td></tr></table></figure>
+
+<h2 id="本地启动"><a href="#本地启动" class="headerlink" title="本地启动"></a><strong>本地启动</strong></h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bin">hexo g -d<br>hexo s<br></code></pre></td></tr></table></figure>
+
+<p>浏览器访问 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a></p>
+<h1 id="个性化页面展示"><a href="#个性化页面展示" class="headerlink" title="个性化页面展示"></a>个性化页面展示</h1><p>页面的标题等位置显示默认的文字，可以改下显示一些个性化的信息。</p>
+<h2 id="浏览器tab页名称"><a href="#浏览器tab页名称" class="headerlink" title="浏览器tab页名称"></a>浏览器tab页名称</h2><p>修改根目录下 <code>_config.yml</code>​ 中的 <code>title</code>​ 字段。</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180244.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h2 id="博客标题"><a href="#博客标题" class="headerlink" title="博客标题"></a>博客标题</h2><p>主题目录 <code>themes\fluid</code>​ 下 <code>_config.yml</code>​ 中的 <code>blog_title</code>​ 字段。</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180307.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h2 id="主页正中间的文字"><a href="#主页正中间的文字" class="headerlink" title="主页正中间的文字"></a>主页正中间的文字</h2><p>主题目录 <code>themes\fluid</code>​ 下 <code>_config.yml</code>​ 中的 <code>text</code>​ 字段。</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180330.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>修改好配置后，页面效果如下，可以看到现在显示的内容变成了我们的个人信息。</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180424.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h1 id="添加阅读量统计"><a href="#添加阅读量统计" class="headerlink" title="添加阅读量统计"></a>添加阅读量统计</h1><p>需要借助三方服务来统计阅读量，这里是用 <code>Leancloud</code>​ 的免费服务来进行统计。</p>
+<h2 id="申请LeanCloud账号"><a href="#申请LeanCloud账号" class="headerlink" title="申请LeanCloud账号"></a>申请LeanCloud账号</h2><p>进入 <a target="_blank" rel="noopener" href="https://console.leancloud.cn/">官网</a> 注册账号</p>
+<p>需实名认证，完成后才能使用各项服务</p>
+<p>验证邮箱</p>
+<p>创建应用，选择<code>开发版</code>​即可，免费的</p>
+<p>进入该应用的 <code>设置-&gt;应用凭证</code>​，找到 <code>AppID</code>​ 和 <code>AppKey</code>​还有服务器地址，记录下来后面配置要用</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180444.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h2 id="修改Fluid配置"><a href="#修改Fluid配置" class="headerlink" title="修改Fluid配置"></a>修改Fluid配置</h2><p>打开主题目录 <code>themes\fluid</code>​下的 <code>_config.yml</code>​ 文件，修改如下配置</p>
+<h3 id="单篇文章阅读量计数"><a href="#单篇文章阅读量计数" class="headerlink" title="单篇文章阅读量计数"></a>单篇文章阅读量计数</h3><p>打开统计开关</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180504.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>配置 <code>leancloud</code>​的 <code>app_id</code>​ 和 <code>app_key</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180526.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h3 id="页面底部展示网站的-PV、UV-统计数"><a href="#页面底部展示网站的-PV、UV-统计数" class="headerlink" title="页面底部展示网站的 PV、UV 统计数"></a>页面底部展示网站的 PV、UV 统计数</h3><p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180542.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h1 id="添加评论"><a href="#添加评论" class="headerlink" title="添加评论"></a>添加评论</h1><p>打开主题目录 <code>themes\fluid</code>​下的 <code>_config.yml</code>​ 文件，修改如下配置</p>
+<p>启用评论插件</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180643.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>配置 <code>LeanCloud</code>​ 的 <code>appId</code>​ 和 <code>appkey</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180621.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h1 id="思源配置"><a href="#思源配置" class="headerlink" title="思源配置"></a>思源配置</h1><p>本次需要使用的两个插件为</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/terwer/siyuan-plugin-publisher">siyuan-plugin-publisher</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/terwer/siyuan-plugin-picgo">siyuan-plugin-picgo</a></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180733.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402180811.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h2 id="PicGo"><a href="#PicGo" class="headerlink" title="PicGo"></a>PicGo</h2><p>配置PicGo</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181041.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>参考这张图，完成个人的仓库名，分支</p>
+<p><strong>经过测试完善，要把</strong>​<strong>替换本地链接****和</strong>​<strong>剪切板自动上传****给关掉，插件也可以关掉，避免在断网环境下本地笔记都打不开笔记图片</strong></p>
+<p>以及Token设定</p>
+<p>token生成如下：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/settings/tokens">Personal Access Tokens (Classic) (github.com)</a></p>
+<p>token生成选择<strong>repo,admin:org,workflow,write:packages</strong></p>
+<p> <em>(很重要，不然图片显示不出来</em></p>
+<p>完成设置后，可以上传图片测试是否成功</p>
+<h2 id="Publisher"><a href="#Publisher" class="headerlink" title="Publisher"></a>Publisher</h2><p>发布工具-&gt;设置-&gt;平台导入-&gt;一键全部导入-&gt;发布配置</p>
+<p>启用Hexo，选择设置</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181109.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>我这里markdown文档都是统一放到source&#x2F;_posts下面，所以发布目录选择&#x2F;source&#x2F;_posts,图床服务选择PicGo</p>
+<p>其余基本默认即可，完成后及时完成测试</p>
+<h1 id="Github-Actions"><a href="#Github-Actions" class="headerlink" title="Github Actions"></a>Github Actions</h1><p>这里将hexo-blog这个目录未编译的文件传到Blogs里面，可参考我的目录结构</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Dre4m017/Blogs">https://github.com/Dre4m017/Blogs</a></p>
+<p> <em>（themes文件夹内容过多可能不能直接以拖拽的方式传到网页端github，可以先将项目clone到本地，在本地拖拽进对应的目录，再push上去，wsl可能会遇到网络问题push不上去，可以给wsl挂一个代理）</em></p>
+<p>存放静态页面的项目什么都不用上传</p>
+<h2 id="生成密钥"><a href="#生成密钥" class="headerlink" title="生成密钥"></a>生成密钥</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bin">ssh-keygen -t ed25519 -f hexo_deploy_key_nopass -N &quot;&quot;<br></code></pre></td></tr></table></figure>
+
+<p>在我们第一个存放源码的仓库<code>Blogs</code>​中将<code>hexo_deploy_key_nopass</code>​放入secret</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181136.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>第二个.github.io的仓库Deploy存放hexo_deploy_key_nopass.pub</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181208.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>完成上述之后，我们实际上为了完成两个仓库之间交互的第一步</p>
+<h2 id="编写Action脚本"><a href="#编写Action脚本" class="headerlink" title="编写Action脚本"></a>编写Action脚本</h2><p>到Blogs下的Actions，New workflow→set up a workflow yourself ，自行编写Action脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs bin">name: HEXO CI<br><br>on:<br>  push:<br>    branches:<br>    - main<br><br>jobs:<br>  build:<br>    runs-on: ubuntu-latest<br>    strategy:<br>      matrix:<br>        node-version: [20.x]<br><br>    steps:<br>      - uses: actions/checkout@v3<br><br>      - name: Use Node.js $&#123;&#123; matrix.node-version &#125;&#125;<br>        uses: actions/setup-node@v3<br>        with:<br>          node-version: $&#123;&#123; matrix.node-version &#125;&#125;<br><br>      - name: Configuration environment<br>        env:<br>          HEXO_EPLOY_PRI: $&#123;&#123; secrets.HEXO_EPLOY_PRI &#125;&#125; //改成你自己的Blogs secrets名称<br>        run: |<br>          mkdir -p ~/.ssh/<br>          echo &quot;$HEXO_EPLOY_PRI&quot; | tr -d &#x27;\r&#x27; &gt; ~/.ssh/id_rsa<br>          chmod 600 ~/.ssh/id_rsa<br>          ssh-keyscan github.com &gt;&gt; ~/.ssh/known_hosts<br>          git config --global user.name &quot;Dre4m017&quot;       //改成你自己的github名称<br>          git config --global user.email &quot;   &quot;           //写上你自己的邮箱<br><br>      - name: Install dependencies<br>        run: |<br>          npm install -g hexo-cli<br>          npm install<br>          npm install hexo-deployer-git --save<br><br>      - name: Deploy hexo<br>        run: |<br>          hexo clean<br>          hexo g<br>          hexo d<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改-config-yml"><a href="#修改-config-yml" class="headerlink" title="修改_config.yml"></a>修改_config.yml</h2><p>如果原來是 http 的，要改為 ssh 格式</p>
+<ul>
+<li><p>http</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181227.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+</li>
+<li><p>ssh</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181250.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+</li>
+</ul>
+<p>到了这步应该就已经完成了笔记自动化部署了</p>
+<p>之后就可以将思源的笔记一键发布了</p>
+<p>可以在.github.io这个项目下的Settings-Pages找到自己的site</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/20250402181311.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yaorongke/article/details/119089190">https://blog.csdn.net/yaorongke/article/details/119089190</a></p>
+<p><a target="_blank" rel="noopener" href="https://wh1tej0ker.github.io/">https://wh1tej0ker.github.io/</a></p>
+<p><del>友情客串</del></p>
+<p><a target="_blank" rel="noopener" href="https://n1mbus-lock.github.io/post/build-a-personal-blog-of-your-own-1qpsrd.html">https://n1mbus-lock.github.io/post/build-a-personal-blog-of-your-own-1qpsrd.html</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%85%B6%E5%AE%83/" class="category-chain-item">其它</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" class="print-no-link">#博客搭建</a>
+      
+        <a href="/tags/Hexo/" class="print-no-link">#Hexo</a>
+      
+        <a href="/tags/%E6%80%9D%E6%BA%90/" class="print-no-link">#思源</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>免费开源的一键化部署方案</div>
+      <div>http://example.com/post/free-and-open-source-oneclick-deployment-solution-5yk6g.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Dre4m</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/post/cap-lewk0.html" title="HTB_Cap">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">HTB_Cap</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/post/alert-z1tfcsg.html" title="HTB_Alert">
+                        <span class="hidden-mobile">HTB_Alert</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"vklZyGJHIw3vHy3PTGM92QOy-gzGzoHsz","appKey":"uiPwluTg2cOzOaF4R6Ljpxw4","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
